@@ -20,13 +20,11 @@ export const routes: Routes = [
   },
   {
     path: 'category/:slug',
-    data: { renderMode: 'server' },
     component: Category,
     title: 'Category'
   },
   {
     path: 'article/:slug',
-    data: { renderMode: 'server' },
     component: Article,
     title: 'Article'
   },
