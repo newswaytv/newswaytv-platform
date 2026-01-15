@@ -1,4 +1,4 @@
-import { Component, Inject, PLATFORM_ID, OnInit } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NgFor, NgIf, DatePipe, isPlatformServer } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, ParamMap } from '@angular/router';
@@ -23,7 +23,8 @@ export class Category implements OnInit {
     private meta: Meta,
     private title: Title,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -34,11 +35,12 @@ export class Category implements OnInit {
       this.loading = true;
       this.articles = [];
 
-      // Always show mock data after 2 seconds
+      // Always show mock data after 1 seconds
       setTimeout(() => {
         this.articles = this.getArticlesForCategory(slug);
         this.loading = false;
-      }, 2000);
+        this.cdr.detectChanges();
+      }, 1000);
     });
   }
 
