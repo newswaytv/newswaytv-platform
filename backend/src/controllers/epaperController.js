@@ -239,7 +239,10 @@ exports.uploadPdf = async (req, res) => {
     const filePath = path.join(uploadsDir, filename);
     fs.writeFileSync(filePath, req.file.buffer);
 
-    const baseUrl = process.env.UPLOADS_PUBLIC_BASE_URL || `${req.protocol}://${req.get('host')}`;
+    const forwardedProto = req.headers['x-forwarded-proto'];
+    const protocol = Array.isArray(forwardedProto) ? forwardedProto[0] : forwardedProto;
+    const safeProtocol = protocol || req.protocol || 'https';
+    const baseUrl = process.env.UPLOADS_PUBLIC_BASE_URL || `${safeProtocol}://${req.get('host')}`;
     const pdfUrl = `${baseUrl.replace(/\/$/, '')}/uploads/${filename}`;
     console.log('PDF uploaded locally:', pdfUrl);
     res.status(201).json({ pdfUrl });
