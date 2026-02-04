@@ -55,11 +55,11 @@ export class EpaperHomeComponent implements OnInit {
   }
 
   downloadEpaper(epaper: Epaper): void {
-    if (!epaper.pdfUrl) {
+    if (!epaper.id) {
       return;
     }
     const anchor = document.createElement('a');
-    anchor.href = epaper.pdfUrl;
+    anchor.href = this.epaperService.getDownloadUrl(epaper.id);
     anchor.download = `${epaper.title || 'epaper'}.pdf`;
     anchor.target = '_blank';
     anchor.rel = 'noopener';
