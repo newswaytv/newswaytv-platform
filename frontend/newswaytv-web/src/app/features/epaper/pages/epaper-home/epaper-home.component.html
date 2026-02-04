@@ -36,7 +36,10 @@
         <div class="card-body">
           <h3>{{ epaper.title }}</h3>
           <p>{{ epaper.date }}</p>
-          <button type="button" (click)="openEpaper(epaper)">Open Viewer</button>
+          <div class="card-actions">
+            <button type="button" (click)="openEpaper(epaper)">Open Viewer</button>
+            <button type="button" class="download" (click)="downloadEpaper(epaper)">Download PDF</button>
+          </div>
         </div>
       </article>
     </div>

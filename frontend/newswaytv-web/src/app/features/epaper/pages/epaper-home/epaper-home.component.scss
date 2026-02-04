@@ -106,8 +106,14 @@ h1 {
     color: theme.$muted-ink;
   }
 
-  button {
+  .card-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
     margin-top: 6px;
+  }
+
+  button {
     border: none;
     background: theme.$accent;
     color: #ffffff;
@@ -115,5 +121,16 @@ h1 {
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
+  }
+
+  .download {
+    text-decoration: none;
+    background: #222222;
+    color: #ffffff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
   }
 }
