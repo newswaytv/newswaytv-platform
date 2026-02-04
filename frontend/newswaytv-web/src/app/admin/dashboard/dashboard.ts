@@ -33,6 +33,7 @@ export class Dashboard implements OnInit {
   isTestingUrl = false;
   epapers: Epaper[] = [];
   useManualUrl = true;
+  urlBadge = '';
   editingId: string | null = null;
 
   form: EpaperAdminForm = {
@@ -185,6 +186,48 @@ export class Dashboard implements OnInit {
     }
     this.form.pdfUrl = `https://drive.google.com/file/d/${fileId}/view?usp=drive_link`;
     this.successMessage = 'Drive link added.';
+    this.urlBadge = 'Google Drive';
+  }
+
+  onPdfUrlChange(value: string): void {
+    const url = value.trim();
+    if (!url) {
+      this.urlBadge = '';
+      return;
+    }
+
+    if (url.includes('drive.google.com')) {
+      this.urlBadge = 'Google Drive';
+      return;
+    }
+
+    if (url.includes('github.com') && url.includes('/releases/download/')) {
+      this.urlBadge = 'GitHub Release';
+      return;
+    }
+
+    if (url.includes('dropbox.com')) {
+      this.urlBadge = 'Dropbox';
+      return;
+    }
+
+    this.urlBadge = 'OK';
+  }
+
+  normalizeDropboxUrl(value: string): string {
+    const raw = value.trim();
+    if (!raw || !raw.includes('dropbox.com')) {
+      return raw;
+    }
+    try {
+      const parsed = new URL(raw);
+      // Force direct-download host for PDF.js compatibility
+      parsed.hostname = 'dl.dropboxusercontent.com';
+      parsed.searchParams.set('dl', '1');
+      return parsed.toString();
+    } catch {
+      return raw;
+    }
   }
 
   onEditionChange(editionId: string): void {

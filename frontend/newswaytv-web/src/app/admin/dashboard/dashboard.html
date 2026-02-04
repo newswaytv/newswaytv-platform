@@ -37,7 +37,14 @@
       </label>
       <label>
         PDF URL
-        <input type="url" [(ngModel)]="form.pdfUrl" name="pdfUrl" required />
+        <input
+          type="url"
+          [(ngModel)]="form.pdfUrl"
+          name="pdfUrl"
+          required
+          (ngModelChange)="form.pdfUrl = normalizeDropboxUrl($event); onPdfUrlChange(form.pdfUrl)"
+        />
+        <span class="badge" *ngIf="urlBadge">{{ urlBadge }}</span>
       </label>
       <label *ngIf="useManualUrl">
         Paste Google Drive Link

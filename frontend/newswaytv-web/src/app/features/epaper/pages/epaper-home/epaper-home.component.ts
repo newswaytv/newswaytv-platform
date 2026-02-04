@@ -54,6 +54,18 @@ export class EpaperHomeComponent implements OnInit {
     this.router.navigate(['/epaper/view', epaper.id]);
   }
 
+  downloadEpaper(epaper: Epaper): void {
+    if (!epaper.pdfUrl) {
+      return;
+    }
+    const anchor = document.createElement('a');
+    anchor.href = epaper.pdfUrl;
+    anchor.download = `${epaper.title || 'epaper'}.pdf`;
+    anchor.target = '_blank';
+    anchor.rel = 'noopener';
+    anchor.click();
+  }
+
   private loadEditions(): void {
     this.epaperService.getEditions().subscribe((editions) => {
       this.editions = editions;
