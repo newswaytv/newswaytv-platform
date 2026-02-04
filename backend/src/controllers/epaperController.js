@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const fetch = (...args) => import('node-fetch').then(({ default: f }) => f(...args));
 const Epaper = require('../models/Epaper');
 const Edition = require('../models/Edition');
 const { uploadToR2 } = require('../r2');
@@ -181,6 +182,30 @@ exports.deleteEpaper = async (req, res) => {
   } catch (error) {
     console.error('Failed to delete epaper', error);
     res.status(500).json({ message: 'Failed to delete epaper' });
+  }
+};
+
+exports.downloadEpaper = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const epaper = await Epaper.findById(id);
+    if (!epaper) {
+      res.status(404).json({ message: 'Epaper not found' });
+      return;
+    }
+
+    const response = await fetch(epaper.pdfUrl);
+    if (!response.ok || !response.body) {
+      res.status(502).json({ message: 'Failed to fetch PDF' });
+      return;
+    }
+
+    res.setHeader('Content-Type', response.headers.get('content-type') || 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=\"${epaper.title || 'epaper'}.pdf\"`);
+    response.body.pipe(res);
+  } catch (error) {
+    console.error('Failed to download epaper', error);
+    res.status(500).json({ message: 'Failed to download epaper' });
   }
 };
 

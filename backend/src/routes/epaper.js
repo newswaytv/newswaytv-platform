@@ -7,6 +7,7 @@ const {
   createEpaper,
   updateEpaper,
   deleteEpaper,
+  downloadEpaper,
   uploadPdf
 } = require('../controllers/epaperController');
 const { upload } = require('../uploads');
@@ -14,6 +15,7 @@ const { upload } = require('../uploads');
 router.get('/editions', getEditions);
 router.get('/', getEpapers);
 router.get('/:id', getEpaperById);
+router.get('/:id/download', downloadEpaper);
 router.post('/upload', (req, res, next) => {
   upload.single('file')(req, res, (err) => {
     if (err) {

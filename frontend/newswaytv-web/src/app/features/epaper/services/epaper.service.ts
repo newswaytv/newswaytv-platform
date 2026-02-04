@@ -158,6 +158,10 @@ export class EpaperService {
     return of({ message: 'Epaper deleted' }).pipe(delay(150));
   }
 
+  getDownloadUrl(id: string): string {
+    return `${this.baseUrl}/epaper/${id}/download`;
+  }
+
   uploadPdf(file: File): Observable<{ pdfUrl: string }> {
     const formData = new FormData();
     formData.append('file', file);
